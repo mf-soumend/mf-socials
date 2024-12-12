@@ -9,6 +9,7 @@ import {
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
+import { colors } from "app/theme";
 
 interface CustomTextInputProps {
   value: string;
@@ -68,7 +69,7 @@ const styles = StyleSheet.create({
     borderColor: "#ccc",
     borderRadius: 8,
     paddingHorizontal: 16,
-    backgroundColor: "#eee",
+    backgroundColor: colors.cultured,
   },
   input: {
     flex: 1,

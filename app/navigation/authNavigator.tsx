@@ -50,6 +50,7 @@ export const AuthNavigator = (props: NavigationProps) => {
           component={RegistrationScreen}
           options={{
             title: "Create your account",
+            headerShown: false,
           }}
         />
         <AuthStack.Screen

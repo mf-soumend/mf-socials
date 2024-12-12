@@ -8,29 +8,38 @@ import {
   View,
 } from "react-native";
 import React, { FC, useState } from "react";
-import CustomTextInput from "components/CustomTextInput";
-import { faEye, faEyeSlash, faUser } from "@fortawesome/free-solid-svg-icons";
-import { CustomButton } from "components/CustomButton";
 import { AuthScreenProps } from "navigation";
-import { colors } from "app/theme";
+import { colors } from "theme";
+import CustomTextInput from "components/CustomTextInput";
+import {
+  faEnvelope,
+  faEye,
+  faEyeSlash,
+  faUser,
+} from "@fortawesome/free-solid-svg-icons";
+import { CustomButton } from "components/CustomButton";
 
-const LogInForm: FC<AuthScreenProps<"login">> = ({ navigation }) => {
+const RegistrationForm: FC<AuthScreenProps<"registration">> = ({
+  navigation,
+}) => {
   const [showPassword, setShowPassword] = useState(false);
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [disabled, setDisabled] = useState(false);
   const onSignIn = () => {
-    if (email === "" || password === "") {
+    if (name === "" || email === "" || password === "") {
       setError("Please enter all fields !!");
     } else {
       setError("");
       setDisabled(true);
       setTimeout(() => {
-        Alert.alert("Logged in succesfully !!");
+        Alert.alert("Registered succesfully !!");
         setDisabled(false);
         setEmail("");
         setPassword("");
+        setName("");
       }, 2000);
     }
   };
@@ -43,14 +52,21 @@ const LogInForm: FC<AuthScreenProps<"login">> = ({ navigation }) => {
           : () => {}
       }
     >
-      <View style={styles.loginFormContainer}>
+      <View style={styles.signupFormContainer}>
         <View>
+          <CustomTextInput
+            style={styles.input}
+            placeholder="Name"
+            value={name}
+            onChangeText={setName}
+            rightIcon={faUser}
+          />
           <CustomTextInput
             style={styles.input}
             placeholder="Email"
             value={email}
             onChangeText={setEmail}
-            rightIcon={faUser}
+            rightIcon={faEnvelope}
           />
           <CustomTextInput
             style={styles.input}
@@ -63,31 +79,24 @@ const LogInForm: FC<AuthScreenProps<"login">> = ({ navigation }) => {
             }}
             rightIcon={showPassword ? faEye : faEyeSlash}
           />
-          <Text
-            onPress={() => {
-              navigation.navigate("forgetPassword", { email: email });
-            }}
-            style={styles.forgetPasswordButton}
-          >
-            Forget your password?
-          </Text>
         </View>
-        <View style={styles.loginActions}>
+        <View style={styles.signupActions}>
           {error !== "" && <Text style={styles.errorText}>{error}</Text>}
           <CustomButton
-            title="SIGN IN"
+            title="Sign Up"
             disabled={disabled}
             onPress={onSignIn}
             buttonTextStyle={[styles.button]}
+            buttonBgStyle={[!disabled ? styles.buttonBg : styles.empty]}
           />
           <Text
             onPress={() => {
               console.log("first");
-              navigation.navigate("registration");
+              navigation.pop();
             }}
             style={styles.link}
           >
-            Don't have an account? Create
+            Already have an account? Login
           </Text>
         </View>
       </View>
@@ -95,7 +104,7 @@ const LogInForm: FC<AuthScreenProps<"login">> = ({ navigation }) => {
   );
 };
 
-export default LogInForm;
+export default RegistrationForm;
 
 const styles = StyleSheet.create({
   container: {
@@ -106,22 +115,21 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     padding: 10,
   },
-  loginActions: {
+  signupActions: {
     gap: 20,
   },
   button: {
     fontSize: 18,
+  },
+  buttonBg: {
+    backgroundColor: colors.freeBlue,
   },
   link: {
     width: "100%",
     textAlign: "center",
     color: colors.gray,
   },
-  forgetPasswordButton: {
-    alignSelf: "flex-end",
-    color: colors.gray,
-  },
-  loginFormContainer: {
+  signupFormContainer: {
     width: Platform.OS === "web" ? 500 : "100%",
     flex: 1,
     justifyContent: "space-between",
@@ -132,4 +140,5 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: colors.electicRed,
   },
+  empty: {},
 });

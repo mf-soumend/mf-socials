@@ -2,6 +2,7 @@ import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 import { AuthScreenProps } from "navigation";
 import LogInForm from "components/LogInForm";
 import { FC } from "react";
+import { colors } from "theme";
 
 export const LoginScreen: FC<AuthScreenProps<"login">> = (props) => {
   return (
@@ -31,11 +32,11 @@ const styles = StyleSheet.create({
     paddingVertical: 60,
   },
   loginHeaderTitle: {
-    color: "white",
+    color: colors.white,
     fontSize: 40,
   },
   loginHeaderDescription: {
     fontSize: 14,
-    color: "#dfdfdf",
+    color: colors.smokeWhite,
   },
 });
