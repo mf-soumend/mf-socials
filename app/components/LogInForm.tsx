@@ -83,7 +83,7 @@ const LogInForm: FC<AuthScreenProps<"login">> = ({ navigation }) => {
           <Text
             onPress={() => {
               console.log("first");
-              navigation.navigate("registration");
+              navigation.replace("registration");
             }}
             style={styles.link}
           >
@@ -107,6 +107,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   loginActions: {
+    marginTop: 30,
     gap: 20,
   },
   button: {
