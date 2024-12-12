@@ -49,6 +49,7 @@ const LogInForm: FC<AuthScreenProps<"login">> = ({ navigation }) => {
             style={styles.input}
             placeholder="Email"
             value={email}
+            disabled={disabled}
             onChangeText={setEmail}
             rightIcon={faUser}
           />
@@ -56,6 +57,7 @@ const LogInForm: FC<AuthScreenProps<"login">> = ({ navigation }) => {
             style={styles.input}
             placeholder="Password"
             value={password}
+            disabled={disabled}
             onChangeText={setPassword}
             secureTextEntry={!showPassword}
             onRightIconPress={() => {
@@ -65,7 +67,7 @@ const LogInForm: FC<AuthScreenProps<"login">> = ({ navigation }) => {
           />
           <Text
             onPress={() => {
-              navigation.navigate("forgetPassword", { email: email });
+              navigation.navigate("forgetPassword", { email });
             }}
             style={styles.forgetPasswordButton}
           >
@@ -82,7 +84,6 @@ const LogInForm: FC<AuthScreenProps<"login">> = ({ navigation }) => {
           />
           <Text
             onPress={() => {
-              console.log("first");
               navigation.replace("registration");
             }}
             style={styles.link}

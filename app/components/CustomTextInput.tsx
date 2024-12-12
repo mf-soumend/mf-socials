@@ -17,6 +17,7 @@ interface CustomTextInputProps {
   placeholder?: string;
   leftIcon?: IconDefinition;
   rightIcon?: IconDefinition;
+  disabled?: boolean;
   onLeftIconPress?: () => void;
   onRightIconPress?: () => void;
   style?: StyleProp<ViewStyle>;
@@ -29,6 +30,7 @@ const CustomTextInput: React.FC<CustomTextInputProps> = ({
   placeholder,
   leftIcon,
   rightIcon,
+  disabled,
   onLeftIconPress,
   onRightIconPress,
   style,
@@ -45,6 +47,7 @@ const CustomTextInput: React.FC<CustomTextInputProps> = ({
       <TextInput
         style={styles.input}
         value={value}
+        editable={!disabled}
         onChangeText={onChangeText}
         placeholder={placeholder}
         {...rest}

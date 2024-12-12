@@ -77,6 +77,7 @@ const RegistrationForm: FC<AuthScreenProps<"registration">> = ({
             placeholder="Name"
             value={name}
             onChangeText={setName}
+            disabled={disabled}
             rightIcon={faUser}
           />
           <CustomTextInput
@@ -84,6 +85,7 @@ const RegistrationForm: FC<AuthScreenProps<"registration">> = ({
             placeholder="Email"
             value={email}
             onChangeText={setEmail}
+            disabled={disabled}
             rightIcon={faEnvelope}
           />
           <CustomTextInput
@@ -91,6 +93,7 @@ const RegistrationForm: FC<AuthScreenProps<"registration">> = ({
             placeholder="Password"
             value={password}
             onChangeText={setPassword}
+            disabled={disabled}
             secureTextEntry={!showPassword}
             onRightIconPress={() => {
               setShowPassword((show: boolean) => !show);
@@ -100,6 +103,7 @@ const RegistrationForm: FC<AuthScreenProps<"registration">> = ({
           <CustomTextInput
             style={styles.input}
             placeholder="Confirm password"
+            disabled={disabled}
             value={confirmPassword}
             onChangeText={setConfirmPassword}
             secureTextEntry={!showConfirmPassword}
@@ -114,6 +118,7 @@ const RegistrationForm: FC<AuthScreenProps<"registration">> = ({
           <CheckBox
             title="I read and agree to Terms & Conditions"
             checked={termsAccepted}
+            disabled={disabled}
             onPress={() => {
               setTermsAccepted((val) => !val);
             }}
