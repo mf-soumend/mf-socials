@@ -13,28 +13,23 @@ import CustomTextInput from "./CustomTextInput";
 import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import { CustomButton } from "./CustomButton";
 import { colors } from "app/theme";
+import { useFormik } from "formik";
+import { forgotPasswordSchema, initialForgotPasswordData } from "validation";
 
 const ForgotPasswordForm: FC<AuthScreenProps<"forgetPassword">> = ({
   navigation,
   route,
 }) => {
   const { email: forwardedMail } = route.params;
-  const [email, setEmail] = useState(forwardedMail ? forwardedMail : "");
   const [error, setError] = useState("");
-  const [disabled, setDisabled] = useState(false);
-  const onResetPassword = () => {
-    if (email === "") {
-      setError("Please enter Email !!");
-    } else {
-      setError("");
-      setDisabled(true);
-      setTimeout(() => {
-        Alert.alert("Logged in succesfully !!");
-        setDisabled(false);
-        setEmail("");
-      }, 2000);
-    }
-  };
+  const formik = useFormik({
+    initialValues: initialForgotPasswordData(forwardedMail),
+    validationSchema: forgotPasswordSchema,
+    onSubmit: async (values) => {
+      // TODO : Reset password funtionality to be implemented
+      Alert.alert("Reset password succesful !!");
+    },
+  });
   return (
     <TouchableWithoutFeedback
       style={styles.container}
@@ -49,9 +44,15 @@ const ForgotPasswordForm: FC<AuthScreenProps<"forgetPassword">> = ({
           <CustomTextInput
             style={styles.input}
             placeholder="Email"
-            value={email}
-            disabled={disabled}
-            onChangeText={setEmail}
+            name="email"
+            value={formik.values.email}
+            handleChange={formik.handleChange}
+            handleBlur={formik.handleBlur}
+            error={
+              formik.touched.email && formik.errors.email
+                ? formik.errors.email
+                : ""
+            }
             rightIcon={faEnvelope}
           />
         </View>
@@ -59,10 +60,10 @@ const ForgotPasswordForm: FC<AuthScreenProps<"forgetPassword">> = ({
           {error !== "" && <Text style={styles.errorText}>{error}</Text>}
           <CustomButton
             title="Reset Password"
-            disabled={disabled}
-            onPress={onResetPassword}
-            buttonTextStyle={disabled ? styles.empty : styles.button}
-            buttonBgStyle={disabled ? styles.empty : styles.buttonBg}
+            disabled={!formik.isValid}
+            onPress={formik.handleSubmit}
+            buttonTextStyle={!formik.isValid ? styles.empty : styles.button}
+            buttonBgStyle={!formik.isValid ? styles.empty : styles.buttonBg}
           />
           <Text
             onPress={() => {
@@ -92,7 +93,6 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   input: {
-    marginBottom: 20,
     padding: 10,
   },
   actionsWrapper: {
