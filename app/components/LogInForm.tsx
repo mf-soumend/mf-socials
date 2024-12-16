@@ -15,15 +15,19 @@ import { AuthScreenProps } from "navigation";
 import { colors } from "app/theme";
 import { useFormik } from "formik";
 import { initialLoginData, loginSchema } from "validation";
+import { useDispatch } from "react-redux";
+import { loginUser } from "app/store";
 
 const LogInForm: FC<AuthScreenProps<"login">> = ({ navigation }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string>();
+  const dispatch = useDispatch();
   const formik = useFormik({
     initialValues: initialLoginData,
     validationSchema: loginSchema,
     onSubmit: async (values) => {
       // TODO : Login funtionality to be implemented
+      dispatch(loginUser({ name: "Soumen Das" })); // TODO : need to dispatch actual user
       Alert.alert("Logged in succesfully !!");
     },
   });

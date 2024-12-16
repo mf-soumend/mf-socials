@@ -1,4 +1,3 @@
-import { NavigationContainer } from "@react-navigation/native";
 import {
   createNativeStackNavigator,
   NativeStackScreenProps,
@@ -7,9 +6,7 @@ import { LoginScreen, RegistrationScreen, ForgetPasswordScreen } from "screens";
 import { useMemo } from "react";
 import { useColorScheme } from "react-native";
 import { darkTheme, lightTheme } from "theme";
-
-export interface NavigationProps
-  extends Partial<React.ComponentProps<typeof NavigationContainer>> {}
+import { NavigationProps } from "navigation";
 
 export type AuthParamList = {
   login: undefined;
@@ -29,39 +26,37 @@ export const AuthNavigator = (props: NavigationProps) => {
   }, [darkTheme, lightTheme, scheme]);
 
   return (
-    <NavigationContainer theme={appTheme} {...props}>
-      <AuthStack.Navigator
-        initialRouteName="login"
-        screenOptions={{
-          headerShown: true,
-          headerTintColor: appTheme.colors.primary,
-          headerTitle: "",
-          navigationBarColor: appTheme.colors.background,
-          headerShadowVisible: false,
+    <AuthStack.Navigator
+      initialRouteName="login"
+      screenOptions={{
+        headerShown: true,
+        headerTintColor: appTheme.colors.primary,
+        headerTitle: "",
+        navigationBarColor: appTheme.colors.background,
+        headerShadowVisible: false,
+      }}
+    >
+      <AuthStack.Screen
+        name="login"
+        component={LoginScreen}
+        options={{ headerShown: false }}
+      />
+      <AuthStack.Screen
+        name="registration"
+        component={RegistrationScreen}
+        options={{
+          title: "Create your account",
+          headerShown: false,
         }}
-      >
-        <AuthStack.Screen
-          name="login"
-          component={LoginScreen}
-          options={{ headerShown: false }}
-        />
-        <AuthStack.Screen
-          name="registration"
-          component={RegistrationScreen}
-          options={{
-            title: "Create your account",
-            headerShown: false,
-          }}
-        />
-        <AuthStack.Screen
-          name="forgetPassword"
-          options={{
-            title: "Forgot password",
-            headerShown: false,
-          }}
-          component={ForgetPasswordScreen}
-        />
-      </AuthStack.Navigator>
-    </NavigationContainer>
+      />
+      <AuthStack.Screen
+        name="forgetPassword"
+        options={{
+          title: "Forgot password",
+          headerShown: false,
+        }}
+        component={ForgetPasswordScreen}
+      />
+    </AuthStack.Navigator>
   );
 };
