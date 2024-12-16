@@ -19,47 +19,25 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { CustomButton } from "components/CustomButton";
 import CheckBox from "components/CheckBox";
+import { useFormik } from "formik";
+import { initialSignupData, signupSchema } from "validation";
 
 const RegistrationForm: FC<AuthScreenProps<"registration">> = ({
   navigation,
 }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [termsAccepted, setTermsAccepted] = useState(false);
   const [error, setError] = useState("");
-  const [disabled, setDisabled] = useState(false);
-  const onSignIn = () => {
-    if (
-      name === "" ||
-      email === "" ||
-      password === "" ||
-      confirmPassword === ""
-    ) {
-      setError("Please enter all fields !!");
-    } else if (password !== confirmPassword) {
-      setError("Password and confirm password doesn't match");
-    } else if (!termsAccepted) {
-      setError("Please accept Terms and Conditions.");
-    } else {
-      setError("");
-      setDisabled(true);
-      setTimeout(() => {
-        Alert.alert("Registered succesfully !!");
-        setDisabled(false);
-        setEmail("");
-        setPassword("");
-        setConfirmPassword("");
-        setTermsAccepted(false);
-        setName("");
-      }, 2000);
-    }
-  };
+  const formik = useFormik({
+    initialValues: initialSignupData,
+    validationSchema: signupSchema,
+    onSubmit: async (values) => {
+      // TODO : Signup funtionality to be implemented
+      Alert.alert("Registered succesfully !!");
+    },
+  });
   useEffect(() => {
-    setError("");
+    formik.resetForm();
   }, []);
   return (
     <TouchableWithoutFeedback
@@ -75,22 +53,43 @@ const RegistrationForm: FC<AuthScreenProps<"registration">> = ({
           <CustomTextInput
             style={styles.input}
             placeholder="Name"
-            value={name}
-            onChangeText={setName}
+            name="name"
+            value={formik.values.name}
+            handleChange={formik.handleChange}
+            handleBlur={formik.handleBlur}
+            error={
+              formik.touched.name && formik.errors.name
+                ? formik.errors.name
+                : ""
+            }
             rightIcon={faUser}
           />
           <CustomTextInput
             style={styles.input}
             placeholder="Email"
-            value={email}
-            onChangeText={setEmail}
+            name="email"
+            value={formik.values.email}
+            handleChange={formik.handleChange}
+            handleBlur={formik.handleBlur}
+            error={
+              formik.touched.email && formik.errors.email
+                ? formik.errors.email
+                : ""
+            }
             rightIcon={faEnvelope}
           />
           <CustomTextInput
             style={styles.input}
             placeholder="Password"
-            value={password}
-            onChangeText={setPassword}
+            name="password"
+            value={formik.values.password}
+            handleChange={formik.handleChange}
+            handleBlur={formik.handleBlur}
+            error={
+              formik.touched.password && formik.errors.password
+                ? formik.errors.password
+                : ""
+            }
             secureTextEntry={!showPassword}
             onRightIconPress={() => {
               setShowPassword((show: boolean) => !show);
@@ -100,8 +99,15 @@ const RegistrationForm: FC<AuthScreenProps<"registration">> = ({
           <CustomTextInput
             style={styles.input}
             placeholder="Confirm password"
-            value={confirmPassword}
-            onChangeText={setConfirmPassword}
+            name="confirmPassword"
+            value={formik.values.confirmPassword}
+            handleChange={formik.handleChange}
+            handleBlur={formik.handleBlur}
+            error={
+              formik.touched.confirmPassword && formik.errors.confirmPassword
+                ? formik.errors.confirmPassword
+                : ""
+            }
             secureTextEntry={!showConfirmPassword}
             onRightIconPress={() => {
               setShowConfirmPassword((show: boolean) => !show);
@@ -113,17 +119,27 @@ const RegistrationForm: FC<AuthScreenProps<"registration">> = ({
           {error !== "" && <Text style={styles.errorText}>{error}</Text>}
           <CheckBox
             title="I read and agree to Terms & Conditions"
-            checked={termsAccepted}
+            checked={formik.values.termsAccepted}
             onPress={() => {
-              setTermsAccepted((val) => !val);
+              formik.setFieldValue(
+                "termsAccepted",
+                !formik.values.termsAccepted
+              );
             }}
+            error={
+              formik.touched.termsAccepted && formik.errors.termsAccepted
+                ? formik.errors.termsAccepted
+                : ""
+            }
           />
           <CustomButton
             title="Sign Up"
-            disabled={disabled}
-            onPress={onSignIn}
+            disabled={!formik.isValid || !formik.dirty}
+            onPress={formik.handleSubmit}
             buttonTextStyle={[styles.button]}
-            buttonBgStyle={[!disabled ? styles.buttonBg : styles.empty]}
+            buttonBgStyle={[
+              formik.isValid && formik.dirty ? styles.buttonBg : styles.empty,
+            ]}
           />
           <Text
             onPress={() => {
@@ -147,7 +163,6 @@ const styles = StyleSheet.create({
     gap: 20,
   },
   input: {
-    marginBottom: 20,
     padding: 10,
   },
   signupActions: {

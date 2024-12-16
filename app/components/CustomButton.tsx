@@ -40,6 +40,7 @@ export const CustomButton: React.FC<CustomButtonProps> = ({
 const styles = StyleSheet.create({
   button: {
     backgroundColor: "dodgerblue",
+    fontSize: 18,
     padding: 10,
     borderRadius: 5,
   },
