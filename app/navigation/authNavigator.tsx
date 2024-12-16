@@ -14,7 +14,7 @@ export interface NavigationProps
 export type AuthParamList = {
   login: undefined;
   registration: undefined;
-  forgetPassword: { email: String };
+  forgetPassword: { email: string };
 };
 export type AuthScreenProps<T extends keyof AuthParamList> =
   NativeStackScreenProps<AuthParamList, T>;
@@ -50,10 +50,15 @@ export const AuthNavigator = (props: NavigationProps) => {
           component={RegistrationScreen}
           options={{
             title: "Create your account",
+            headerShown: false,
           }}
         />
         <AuthStack.Screen
           name="forgetPassword"
+          options={{
+            title: "Forgot password",
+            headerShown: false,
+          }}
           component={ForgetPasswordScreen}
         />
       </AuthStack.Navigator>

@@ -12,7 +12,8 @@
       "screens": ["./app/screens"],
       "components/*": ["./app/components/*"],
       "navigation":["./app/navigation"],
-      "utils":["./app/utils"]
+      "utils":["./app/utils"],
+      "validation":["./app/validationSchema"],
     }
   },
 }

@@ -13,27 +13,20 @@ import { faEye, faEyeSlash, faUser } from "@fortawesome/free-solid-svg-icons";
 import { CustomButton } from "components/CustomButton";
 import { AuthScreenProps } from "navigation";
 import { colors } from "app/theme";
+import { useFormik } from "formik";
+import { initialLoginData, loginSchema } from "validation";
 
 const LogInForm: FC<AuthScreenProps<"login">> = ({ navigation }) => {
   const [showPassword, setShowPassword] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [disabled, setDisabled] = useState(false);
-  const onSignIn = () => {
-    if (email === "" || password === "") {
-      setError("Please enter all fields !!");
-    } else {
-      setError("");
-      setDisabled(true);
-      setTimeout(() => {
-        Alert.alert("Logged in succesfully !!");
-        setDisabled(false);
-        setEmail("");
-        setPassword("");
-      }, 2000);
-    }
-  };
+  const [error, setError] = useState<string>();
+  const formik = useFormik({
+    initialValues: initialLoginData,
+    validationSchema: loginSchema,
+    onSubmit: async (values) => {
+      // TODO : Login funtionality to be implemented
+      Alert.alert("Logged in succesfully !!");
+    },
+  });
   return (
     <TouchableWithoutFeedback
       style={styles.container}
@@ -47,25 +40,41 @@ const LogInForm: FC<AuthScreenProps<"login">> = ({ navigation }) => {
         <View>
           <CustomTextInput
             style={styles.input}
+            name="email"
             placeholder="Email"
-            value={email}
-            onChangeText={setEmail}
+            value={formik.values.email}
+            handleChange={formik.handleChange}
+            handleBlur={formik.handleBlur}
             rightIcon={faUser}
+            error={
+              formik.touched.email && formik.errors.email
+                ? formik.errors.email
+                : ""
+            }
           />
           <CustomTextInput
             style={styles.input}
             placeholder="Password"
-            value={password}
-            onChangeText={setPassword}
+            name="password"
+            value={formik.values.password}
+            handleChange={formik.handleChange}
+            handleBlur={formik.handleBlur}
             secureTextEntry={!showPassword}
             onRightIconPress={() => {
               setShowPassword((show: boolean) => !show);
             }}
             rightIcon={showPassword ? faEye : faEyeSlash}
+            error={
+              formik.touched.password && formik.errors.password
+                ? formik.errors.password
+                : ""
+            }
           />
           <Text
             onPress={() => {
-              navigation.navigate("forgetPassword", { email: email });
+              navigation.navigate("forgetPassword", {
+                email: formik.values.email,
+              });
             }}
             style={styles.forgetPasswordButton}
           >
@@ -76,14 +85,13 @@ const LogInForm: FC<AuthScreenProps<"login">> = ({ navigation }) => {
           {error !== "" && <Text style={styles.errorText}>{error}</Text>}
           <CustomButton
             title="SIGN IN"
-            disabled={disabled}
-            onPress={onSignIn}
+            disabled={!formik.isValid || !formik.dirty}
+            onPress={formik.handleSubmit}
             buttonTextStyle={[styles.button]}
           />
           <Text
             onPress={() => {
-              console.log("first");
-              navigation.navigate("registration");
+              navigation.replace("registration");
             }}
             style={styles.link}
           >
@@ -103,12 +111,10 @@ const styles = StyleSheet.create({
     gap: 20,
   },
   input: {
-    marginBottom: 20,
     padding: 10,
-    borderWidth: 1,
-    borderColor: "#ccc",
   },
   loginActions: {
+    marginTop: 30,
     gap: 20,
   },
   button: {
@@ -117,11 +123,11 @@ const styles = StyleSheet.create({
   link: {
     width: "100%",
     textAlign: "center",
-    color: "#999",
+    color: colors.gray,
   },
   forgetPasswordButton: {
     alignSelf: "flex-end",
-    color: "#999",
+    color: colors.gray,
   },
   loginFormContainer: {
     width: Platform.OS === "web" ? 500 : "100%",

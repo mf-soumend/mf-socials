@@ -1,3 +1,4 @@
+import { colors } from "theme";
 import {
   StyleProp,
   StyleSheet,
@@ -27,7 +28,7 @@ export const CustomButton: React.FC<CustomButtonProps> = ({
   return (
     <TouchableOpacity
       disabled={disabled}
-      style={[disabled ? styles.disabled : styles.button, buttonTextStyle]}
+      style={[disabled ? styles.disabled : styles.button, buttonBgStyle]}
       onPress={onPress}
       {...rest}
     >
@@ -39,16 +40,17 @@ export const CustomButton: React.FC<CustomButtonProps> = ({
 const styles = StyleSheet.create({
   button: {
     backgroundColor: "dodgerblue",
+    fontSize: 18,
     padding: 10,
     borderRadius: 5,
   },
   disabled: {
-    backgroundColor: "#d9d9d9",
+    backgroundColor: colors.lightGray,
     padding: 10,
     borderRadius: 5,
   },
   buttonText: {
-    color: "white",
+    color: colors.white,
     fontSize: 16,
     textAlign: "center",
   },

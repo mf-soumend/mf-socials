@@ -33,4 +33,5 @@ export const colors = {
     warning: '#ffa726',
     info: '#29b6f6',
     darkGunmetal: '#1b1c32',
+    freeBlue: '#02655c'
   };
